@@ -1,8 +1,76 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Login";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div id="validation-success"></div>
+<div class="container mt-5" style="border:1px solid #ccc; width:70%; padding:20px">
+    <h3>Login</h3>
+    <form id="loginform"></form>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const validationSuccess = $("#validation-success");
+
+            $("#loginform").kendoForm({
+                validatable: {
+                    validationOnBlur: true,
+                    validationSummary: false,
+                    errorTemplate: "<span class='k-form-error'>#: message #</span>"
+                },
+                items: [
+                    {
+                        field: "EmpMail",
+                        label: "Email Address:",
+                        validation: {
+                            required: { message: "Please enter email address." },
+                            email: { message: "Please enter valid email address." }
+                        }
+                    },
+                    {
+                        field: "EmpPassword",
+                        label: "Password:",
+                        validation: { required: { message: "Please enter password." } },
+                        editor: function (container, options) {
+                            $('<input type="password" id="EmpPassword" name="' + options.field + '" required autocomplete="off"/>')
+                                .appendTo(container)
+                                .kendoTextBox();
+                        }
+                    }
+                ],
+                buttonsTemplate: '<button type="submit" class="k-button k-button-lg k-button-solid-success">Login</button> <button type="reset" class="k-button k-button-lg k-button-solid-base">Clear</button>',
+                validateField: function () { validationSuccess.html(""); },
+                submit: function (e) {
+                    e.preventDefault();
+                    const LoginData = new FormData();
+                    LoginData.append("EmpMail", e.model.EmpMail);
+                    LoginData.append("EmpPassword", e.model.EmpPassword);
+
+                    $.ajax({
+                        method: "POST",
+                        url: "/Home/Logins",
+                        contentType: false,
+                        processData: false,
+                        data: LoginData,
+                        success: function (result) {
+                            if (result.success) {
+                                const role = result.role;  
+                                if(role === "Admin"){
+                                    window.location.href = "../admin/index";
+                                }
+                                else if(role === "Employee"){
+                                    window.location.href = "../employe/index";
+                                }
+                                else{
+                                    window.location.href = "/home/index";
+                                }                              
+                            } else {
+                                validationSuccess.html("<div class='k-messagebox k-messagebox-error'><p>" + result.message + "</p></div>");
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

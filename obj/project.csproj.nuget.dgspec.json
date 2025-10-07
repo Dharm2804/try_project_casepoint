@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\Videos\\project\\project\\project.csproj": {}
+    "C:\\Users\\patel\\OneDrive\\Desktop\\try_project_casepoint\\project.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\Videos\\project\\project\\project.csproj": {
+    "C:\\Users\\patel\\OneDrive\\Desktop\\try_project_casepoint\\project.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\Videos\\project\\project\\project.csproj",
+        "projectUniqueName": "C:\\Users\\patel\\OneDrive\\Desktop\\try_project_casepoint\\project.csproj",
         "projectName": "project",
-        "projectPath": "C:\\Users\\Admin\\Videos\\project\\project\\project.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\Videos\\project\\project\\obj\\",
+        "projectPath": "C:\\Users\\patel\\OneDrive\\Desktop\\try_project_casepoint\\project.csproj",
+        "packagesPath": "C:\\Users\\patel\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\patel\\OneDrive\\Desktop\\try_project_casepoint\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\patel\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -74,7 +73,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.413/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

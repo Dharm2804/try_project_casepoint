@@ -27,15 +27,10 @@ namespace project.Models
         [Required(ErrorMessage = "Gender is required")]
         public string Gender { get; set; }
 
-        [Required(ErrorMessage = "Status is required")]
-        [RegularExpression("^(Active|Inactive)$", ErrorMessage = "Status must be 'Active' or 'Inactive'")]
         public string Status { get; set; }
 
         [Display(Name = "Profile Picture")]
         public string? Profile { get; set; }
-
-        [Required(ErrorMessage = "Role is required")]
-        [StringLength(30, ErrorMessage = "Role cannot exceed 30 characters")]
         public string Role { get; set; }
     }
 }

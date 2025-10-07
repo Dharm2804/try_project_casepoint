@@ -1,0 +1,176 @@
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div id="validation-success"></div>
+
+<div class="container mt-5" style="border:1px solid #ccc; width:70%; padding:20px; border-radius:10px;">
+    <h3 class="mb-3 text-center">Employee Registration</h3>
+    <form id="registerform"></form>
+</div>
+
+@section Scripts {
+    <!-- ✅ Include Kendo & jQuery -->
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.default-v2.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2021.2.616/js/kendo.all.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            const validationSuccess = $("#validation-success");
+
+            $("#registerform").kendoForm({
+                validatable: {
+                    validateOnBlur: true,
+                    validationSummary: false,
+                    errorTemplate: "<span class='k-form-error'>#: message #</span>"
+                },
+                items: [
+                    // ✅ EmpName
+                    {
+                        field: "EmpName",
+                        label: "Full Name:",
+                        validation: {
+                            required: { message: "Employee Name is required" },
+                            pattern: { value: "^[A-Za-z\\s]+$", message: "Only letters and spaces allowed" }
+                        }
+                    },
+
+                    // ✅ EmpMail
+                    {
+                        field: "EmpMail",
+                        label: "Email Address:",
+                        validation: {
+                            required: { message: "Email is required" },
+                            email: { message: "Invalid email address format" }
+                        }
+                    },
+
+                    // ✅ EmpPassword
+                    {
+                        field: "EmpPassword",
+                        label: "Password:",
+                        validation: {
+                            required: { message: "Password is required" },
+                            pattern: { value: "^.{6,}$", message: "Password must be at least 6 characters long" }
+                        },
+                        editor: function (container, options) {
+                            $('<input type="password" name="' + options.field + '" required/>')
+                                .appendTo(container)
+                                .kendoTextBox();
+                        }
+                    },
+
+                    // ✅ Gender dropdown
+                    {
+                        field: "Gender",
+                        label: "Gender:",
+                        validation: { required: { message: "Gender is required" } },
+                        editor: function (container, options) {
+                            $('<input name="' + options.field + '" id="Gender" required/>')
+                                .appendTo(container)
+                                .kendoDropDownList({
+                                    optionLabel: "Select Gender...",
+                                    dataSource: ["Male", "Female", "Other"]
+                                });
+                        }
+                    },
+
+                
+
+                    @* // ✅ Role dropdown
+                    {
+                        field: "Role",
+                        label: "Role:",
+                        validation: { required: { message: "Role is required" } },
+                        editor: function (container, options) {
+                            $('<input name="' + options.field + '" id="Role" />')
+                                .appendTo(container)
+                                .kendoDropDownList({
+                                    optionLabel: "Select Role...",
+                                    dataSource: ["Admin", "Employee"]
+                                });
+                        }
+                    }, *@
+
+                    // ✅ Profile upload
+                    {
+                        field: "Profile",
+                        label: "Profile Image:",
+                        validation: { required: { message: "Please upload a profile image" } },
+                        editor: function (container, options) {
+                            $('<input type="file" id="Profile" name="' + options.field + '" />')
+                                .appendTo(container)
+                                .kendoUpload({
+                                    multiple: false,
+                                    async: { autoUpload: false }
+                                });
+                        }
+                    }
+                ],
+
+                // ✅ Buttons
+                buttonsTemplate: `
+                    <div class="text-center mt-4">
+                        <button type="submit" class="k-button k-button-lg k-button-solid-success">Register</button>
+                        <button type="reset" class="k-button k-button-lg k-button-solid-base">Clear</button>
+                    </div>
+                `,
+
+                // ✅ Submit handler
+                submit: function (e) {
+                    e.preventDefault();
+                    validationSuccess.html("");
+
+                    const formData = new FormData();
+                    formData.append("EmpName", e.model.EmpName);
+                    formData.append("EmpMail", e.model.EmpMail);
+                    formData.append("EmpPassword", e.model.EmpPassword);
+                    formData.append("Gender", e.model.Gender);
+                  
+
+                    const file = $("#Profile")[0].files[0];
+                    if (file) {
+                        formData.append("Profile", file);
+                    }
+
+                    $.ajax({
+                        url: "/Home/Register",
+                        type: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (result) {
+                            if (result.success) {
+                                validationSuccess.html(`
+                                    <div class='k-messagebox k-messagebox-success'>
+                                        <p>${result.message}</p>
+                                    </div>
+                                `);
+                                $("#registerform")[0].reset();
+                            } else {
+                                validationSuccess.html(`
+                                    <div class='k-messagebox k-messagebox-error'>
+                                        <p>${result.message}</p>
+                                    </div>
+                                `);
+                            }
+                        },
+                        error: function (xhr) {
+                            validationSuccess.html(`
+                                <div class='k-messagebox k-messagebox-error'>
+                                    <p>Error during registration. Please try again.</p>
+                                </div>
+                            `);
+                        }
+                    });
+                },
+
+                clear: function () {
+                    validationSuccess.html("");
+                }
+            });
+        });
+    </script>
+}

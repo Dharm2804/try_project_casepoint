@@ -29,9 +29,9 @@ public class HomeController : Controller
         var status = await _auth.Login(login);
         if (status)
         {
-            Console.WriteLine($"Mail: {login.EmpMail}");
             string role = await _auth.GetByEmail(login.EmpMail);
-            Console.WriteLine($"Role: {role}");
+            HttpContext.Session.SetString("Role", role);
+            HttpContext.Session.SetString("Mail", login.EmpMail);
             return Json(new { message = "Login successfully", success = true, role = role });
         }
 

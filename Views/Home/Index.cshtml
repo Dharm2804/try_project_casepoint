@@ -1,13 +1,25 @@
 ﻿@{
     ViewData["Title"] = "Login";
+    Layout = "_LoginLayout";
 }
-<div id="validation-success"></div>
-<div class="container mt-5" style="border:1px solid #ccc; width:70%; padding:20px">
-    <h3>Login</h3>
-    <form id="loginform"></form>
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height:80vh;">
+    <div class="card p-4 shadow" style="width:400px; border-radius:10px; border:1px solid #ccc;">
+        <h3 class="text-center mb-4">Login</h3>
+        <div id="validation-success" class="mb-3"></div>
+
+        <form id="loginform"></form>
+
+        <!-- Don't have an account link -->
+        <div class="text-center mt-3">
+            <span>Don't have an account? </span>
+            <a href="/Home/Register" class="k-link" style="color: blue;">Register</a>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
+    <script src="https://kendo.cdn.telerik.com/2023.2.829/js/kendo.all.min.js"></script>
     <script>
         $(document).ready(function () {
             const validationSuccess = $("#validation-success");
@@ -24,7 +36,12 @@
                         label: "Email Address:",
                         validation: {
                             required: { message: "Please enter email address." },
-                            email: { message: "Please enter valid email address." }
+                            email: { message: "Please enter a valid email address." }
+                        },
+                        editor: function (container, options) {
+                            $('<input type="email" id="EmpMail" name="' + options.field + '" required/>')
+                                .appendTo(container)
+                                .kendoTextBox({ placeholder: "Enter your email" });
                         }
                     },
                     {
@@ -34,12 +51,19 @@
                         editor: function (container, options) {
                             $('<input type="password" id="EmpPassword" name="' + options.field + '" required autocomplete="off"/>')
                                 .appendTo(container)
-                                .kendoTextBox();
+                                .kendoTextBox({ placeholder: "Enter your password" });
                         }
                     }
                 ],
-                buttonsTemplate: '<button type="submit" class="k-button k-button-lg k-button-solid-success">Login</button> <button type="reset" class="k-button k-button-lg k-button-solid-base">Clear</button>',
-                validateField: function () { validationSuccess.html(""); },
+                buttonsTemplate: `
+                    <div class="d-flex justify-content-center mt-3 gap-2">
+                        <button type="submit" class="k-button k-button-lg k-button-solid-success" style="width:160px;">Login</button>
+                        <button type="reset" class="k-button k-button-lg k-button-solid-base" style="width:160px;">Clear</button>
+                    </div>
+                `,
+                validateField: function () { 
+                    validationSuccess.html(""); 
+                },
                 submit: function (e) {
                     e.preventDefault();
                     const LoginData = new FormData();
@@ -54,20 +78,17 @@
                         data: LoginData,
                         success: function (result) {
                             if (result.success) {
-                                const role = result.role;  
-                                sessionStorage.setItem("role", result.role);
+                                const role = result.role;
+                                sessionStorage.setItem("role", role);
                                 sessionStorage.setItem("email", $("#EmpMail").val());
-                                
-                                if(role === "Admin"){
+
+                                if (role === "Admin") {
                                     window.location.href = "../admin/index";
-                                    
-                                }
-                                else if(role === "Employee"){
+                                } else if (role === "Employee") {
                                     window.location.href = "../employe/index";
-                                }
-                                else{
+                                } else {
                                     window.location.href = "/home/index";
-                                }                              
+                                }
                             } else {
                                 validationSuccess.html("<div class='k-messagebox k-messagebox-error'><p>" + result.message + "</p></div>");
                             }
